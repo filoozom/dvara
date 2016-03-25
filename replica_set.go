@@ -106,6 +106,9 @@ type ReplicaSet struct {
 	// Password is the password used to connect to the server for retrieving replica state.
 	Password string
 
+	// Source is the database used to establish credentials and privileges with a MongoDB server.
+	Source string
+
 	ClientsConnected metrics.Counter
 
 	restarter *sync.Once

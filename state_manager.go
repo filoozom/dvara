@@ -170,6 +170,7 @@ func (manager *StateManager) generateProxies(addresses ...string) ([]*Proxy, err
 			ProxyAddr:      manager.replicaSet.proxyAddr(listener),
 			Username:       manager.replicaSet.Username,
 			Password:       manager.replicaSet.Password,
+			Source:         manager.replicaSet.Source,
 			MongoAddr:      address,
 		}
 
@@ -181,7 +182,7 @@ func (manager *StateManager) generateProxies(addresses ...string) ([]*Proxy, err
 func (manager *StateManager) generateReplicaSetState() (*ReplicaSetState, error) {
 	replicaSet := manager.replicaSet
 	addrs := strings.Split(manager.baseAddrs, ",")
-	return replicaSet.ReplicaSetStateCreator.FromAddrs(replicaSet.Username, replicaSet.Password, addrs, replicaSet.Name)
+	return replicaSet.ReplicaSetStateCreator.FromAddrs(replicaSet.Username, replicaSet.Password, addrs, replicaSet.Name, replicaSet.Source)
 }
 
 func (manager *StateManager) getComparison(oldResp, newResp *replSetGetStatusResponse) (*ReplicaSetComparison, error) {

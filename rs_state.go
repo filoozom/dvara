@@ -24,12 +24,13 @@ type ReplicaSetState struct {
 }
 
 // NewReplicaSetState creates a new ReplicaSetState using the given address.
-func NewReplicaSetState(username, password, addr string) (*ReplicaSetState, error) {
+func NewReplicaSetState(username, password, addr, source string) (*ReplicaSetState, error) {
 	const TIMEOUT = 500 * time.Millisecond
 	info := &mgo.DialInfo{
 		Addrs:    []string{addr},
 		Username: username,
 		Password: password,
+		Source:   source,
 		Direct:   true,
 		Timeout:  TIMEOUT,
 	}
@@ -121,10 +122,10 @@ type ReplicaSetStateCreator struct {
 
 // FromAddrs creates a ReplicaSetState from the given set of see addresses. It
 // requires the addresses to be part of the same Replica Set.
-func (c *ReplicaSetStateCreator) FromAddrs(username, password string, addrs []string, replicaSetName string) (*ReplicaSetState, error) {
+func (c *ReplicaSetStateCreator) FromAddrs(username, password string, addrs []string, replicaSetName, source string) (*ReplicaSetState, error) {
 	var r *ReplicaSetState
 	for _, addr := range addrs {
-		ar, err := NewReplicaSetState(username, password, addr)
+		ar, err := NewReplicaSetState(username, password, addr, source)
 		if err != nil {
 			if err != errNoReachableServers {
 				c.Log.Errorf("ignoring failure against address %s: %s", addr, err)

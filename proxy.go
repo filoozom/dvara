@@ -31,6 +31,7 @@ type Proxy struct {
 	ClientListener net.Listener // Listener for incoming client connections
 	Username       string       // Mongo user, if mongo uses auth
 	Password       string       // Mongo password, if mongo uses auth
+	Source         string       // Mongo authentication database, if mongo uses auth
 	ProxyAddr      string       // Address for incoming client connections
 	MongoAddr      string       // Address for destination Mongo server
 
@@ -115,7 +116,7 @@ func (p *Proxy) AuthConn(conn net.Conn) error {
 	socket := &mongoSocket{
 		conn: conn,
 	}
-	err := socket.Login(Credential{Username: p.Username, Password: p.Password, Source: "admin"})
+	err := socket.Login(Credential{Username: p.Username, Password: p.Password, Source: p.Source})
 	if err != nil {
 		return err
 	}

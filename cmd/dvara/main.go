@@ -11,7 +11,7 @@ import (
 	"github.com/facebookgo/gangliamr"
 	"github.com/facebookgo/inject"
 	"github.com/facebookgo/startstop"
-	"github.com/intercom/dvara"
+	"github.com/filoozom/dvara"
 )
 
 func main() {
@@ -40,6 +40,7 @@ func Main() error {
 	replicaName := flag.String("replica_name", "", "Replica name, used in metrics and logging, default is empty")
 	healthCheckInterval := flag.Duration("healthcheckinterval", 5*time.Second, "How often to run the health check")
 	failedHealthCheckThreshold := flag.Uint("failedhealthcheckthreshold", 3, "How many failed checks before a restart")
+	source := flag.String("source", "admin", "database used to establish credentials and privileges")
 
 	flag.Parse()
 	statsClient := NewDataDogStatsDClient(*metricsAddress, "replica:"+*replicaName)
@@ -58,6 +59,7 @@ func Main() error {
 		ServerClosePoolSize:     *serverClosePoolSize,
 		ServerIdleTimeout:       *serverIdleTimeout,
 		Username:                *username,
+		Source:                  *source,
 	}
 	stateManager := dvara.NewStateManager(&replicaSet)
 
